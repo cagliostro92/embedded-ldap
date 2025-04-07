@@ -1,0 +1,34 @@
+# Define a domain component (dc=root, dc=app)
+dn: dc=root, dc=app
+objectClass: dcObject
+objectClass: domain
+
+# Define an organizational unit (employees) under root.app
+dn: ou=employees, dc=root, dc=app
+objectClass: organizationalUnit
+
+# Define a user making part of employees ou under root.app
+dn: uid=admin1, ou=employees, dc=root, dc=app
+objectClass: inetOrgPerson
+uid: admin1
+cn: Mario Rossi
+sn: Rossi
+givenName: Mario
+mail: admin1@root.app
+userPassword: password123
+
+# Define a user making part of employees ou under root.app
+dn: uid=user1, ou=employees, dc=root, dc=app
+objectClass: inetOrgPerson
+uid: user1
+cn: Giuseppe Verdi
+sn: Verdi
+givenName: Giuseppe
+mail: user1@root.app
+userPassword: password123
+
+# Define an administrators group which represents a collection of users under root.app
+dn: cn=administrators, dc=root, dc=app
+objectClass: groupOfNames
+cn: administrators
+member: uid=admin1, ou=employees, dc=root, dc=app

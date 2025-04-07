@@ -1,0 +1,93 @@
+= LDAP
+
+== Project Overview
+The project goal is to create an embedded Ldap server useful when developing applications that require Ldap authentication or authorization.
+It uses the java library `unboundid-ldapsdk`.
+
+== Configuration
+You can configure the following parameters through the Java system properties:
+
+
+|===
+|Property |Purpose |Default
+
+|uername
+|DN to authenticate before query the server
+|uid=application, ou=employees, dc=root, dc=app
+
+|password
+|corresponding password
+|password123
+
+|port
+|the port to be used
+|389
+
+|ldif
+|initial ldif
+|src/main/resources/start.ldif
+|===
+
+
+
+== LDAP Concepts
+
+=== 1. Directory Service
+*Definition*: A system used to store and retrieve directory information, often used for storing user information (such as usernames, passwords, and attributes).
+
+=== 2. LDAP Entry
+*Definition*: A single record or object in an LDAP directory, representing an entity like a domain, user, group, or organizational unit (OU).
+
+=== 3. DN (Distinguished Name)
+*Definition*: The unique name for an entry in the LDAP directory, which specifies its location within the directory tree.
+
+*Example*: `uid=jdoe,ou=users,dc=example,dc=com`.
+
+=== 4. Base DN
+*Definition*: The starting point within the directory tree where an LDAP search begins.
+
+*Example*: `dc=example,dc=com`.
+
+=== 5. Attribute
+*Definition*: A piece of information associated with an LDAP entry. Attributes have a name (e.g., `cn`, `uid`, `mail`) and one or more values.
+
+*Example*: A user entry might have `cn=John Doe`, `mail=jdoe@example.com`.
+
+=== 6. Object Class
+*Definition*: Defines the types of attributes an entry can have. Each LDAP entry is associated with one or more object classes.
+
+*Example*: `inetOrgPerson`, `organizationalUnit`.
+
+=== 7. Bind
+*Definition*: The process of authenticating to the LDAP server.
+
+*Example*: A bind can be done with a DN and password to authenticate.
+
+=== 8. Standardized ObjectClasses in LDAP
+There are certain standardized objectClass values defined by global standards such as the LDAPv3 protocol (RFC 4511) and other related specifications like X.500 and RFC 4519.
+
+==== LDAP Object Classes Table
+
+[cols="3,5,3,7"]
+|===
+| **Object Class** | **Attributes** | **Parent Class(es)** | **Use Case / Description**
+
+| person | cn (common name), sn (surname), givenName, initials, displayName, uid | top | Used to represent basic personal information about a person (e.g., name, surname).
+| organizationalPerson | cn (common name), sn (surname), title, ou (organizational unit), telephoneNumber, facsimileTelephoneNumber, mail | person | Extends `person`, adding organizational attributes for someone in a company or organization (e.g., title, telephone).
+| inetOrgPerson | cn (common name), sn (surname), givenName, displayName, uid, mail, userPassword, employeeNumber | organizationalPerson | A more specific class for representing users in a directory, often used in corporate or institutional directories (e.g., email, user ID).
+| organizationalUnit | ou (organizational unit name) | top | Represents an organizational unit (OU) like a department, group, or team within an organization.
+| groupOfNames | cn (common name), member (list of DN of members) | top | Represents a group of people. Typically used for group membership where members are identified by their DNs.
+| posixGroup | cn (common name), gidNumber (group ID), memberUid (list of user IDs) | top | Used for POSIX groups in a Unix/Linux environment. The `gidNumber` identifies the group, and `memberUid` lists user IDs.
+| domain | dc (domain component) | top | Represents a domain, typically used to define a domain within a domain-based directory structure.
+| dcObject | dc (domain component) | top | Represents a domain component (`dc`), typically used for structuring the directory tree (e.g., `dc=example,dc=com`).
+| groupOfEntries | cn (common name), member (list of DN of members) | top | Represents a group of entries, similar to `groupOfNames`, but allows entries to belong to different object classes.
+| device | deviceID, deviceType | top | Represents a device in the directory, such as a computer, printer, or other networked device.
+| country | c (country name) | top | Used to store country information, often used as a starting point for the directory structure (e.g., `c=US` for the United States).
+| locality | l (locality name) | top | Represents a locality (e.g., city, town). Used for geographic organization in the directory.
+| organization | o (organization name) | top | Represents an organization (e.g., a company, school, or other entity).
+| organizationalRole | roleOccupant, role | organizationalPerson | Represents a specific role within an organization, such as a manager or team lead.
+| eduPerson | eduPersonAffiliation, eduPersonOrgDN, eduPersonPrimaryAffiliation | inetOrgPerson | Used in educational institutions to represent people with attributes related to their role in academia (e.g., student, staff).
+| dynamicObject | objectClass, cn (common name), sn (surname) | top | Represents objects that are dynamically created or modified, commonly used for temporary or transient objects.
+| person | uid, cn, mail, sn | top | Similar to `inetOrgPerson`, used for representing users with basic attributes such as `uid`, `cn`, and `mail`.
+|===
+
