@@ -27,8 +27,14 @@ givenName: Giuseppe
 mail: user1@root.app
 userPassword: password123
 
+# Organizational Unit for groups
+dn: ou=groups, dc=root, dc=app
+objectClass: top
+objectClass: organizationalUnit
+ou: groups
+
 # Define an administrators group which represents a collection of users under root.app
-dn: cn=administrators, dc=root, dc=app
+dn: cn=administrators, ou=groups, dc=root, dc=app
 objectClass: groupOfNames
 cn: administrators
 member: uid=admin1, ou=employees, dc=root, dc=app
